@@ -6,34 +6,15 @@
 /*   By: ykhoussi <ykhoussi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 13:13:36 by ykhoussi          #+#    #+#             */
-/*   Updated: 2025/02/02 18:57:55 by ykhoussi         ###   ########.fr       */
+/*   Updated: 2025/02/03 11:08:22 by ykhoussi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static int	w_count(char const *s, char c)
+static size_t	c_len(const char *s, char c)
 {
-	int	i;
-	int	count;
-
-	i = 0;
-	count = 0;
-	while (s && s[i] != '\0')
-	{
-		while (s[i] != '\0' && s[i] == c)
-			i++;
-		if (s[i] != 0)
-			count++;
-		while (s[i] != '\0' && s[i] != c)
-			i++;
-	}
-	return (count);
-}
-
-static int	ft_len(char const *s, char c)
-{
-	int	i;
+	size_t	i;
 
 	i = 0;
 	while (s[i] && s[i] != c)
@@ -41,77 +22,69 @@ static int	ft_len(char const *s, char c)
 	return (i);
 }
 
-static char	*ft_dup(char const *s, char c)
+static char	**free_all(char **ptr, size_t j)
 {
-	int		len_w;
-	int		i;
-	char	*copy;
-
-	i = 0;
-	len_w = ft_len(s, c);
-	copy = malloc(sizeof(char) * (len_w + 1));
-	if (!copy)
-		return (NULL);
-	while (i < len_w)
-	{
-		copy[i] = s[i];
-		i++;
-	}
-	copy[i] = 0;
-	return (copy);
+	while (j > 0)
+		free(ptr[--j]);
+	free(ptr);
+	return (NULL);
 }
 
-static char	**ft_free(char **strs, int count)
+static size_t	ft_count(char const *s, char c)
 {
-	while (count-- > 0)
-		free(strs[count]);
-	free(strs);
-	return (NULL);
+	size_t	i;
+	size_t	count;
+
+	i = 0;
+	count = 0;
+	while (s[i])
+	{
+		while (s[i] == c)
+			i++;
+		if (s[i])
+		{
+			count++;
+			while (s[i] && s[i] != c)
+				i++;
+		}
+	}
+	return (count);
+}
+
+static int	nichan(char const *s, char c, char **ptr)
+{
+	size_t	i;
+	size_t	j;
+
+	i = 0;
+	j = 0;
+	while (s[i])
+	{
+		while (s[i] == c)
+			i++;
+		if (s[i])
+		{
+			ptr[j] = malloc(c_len(s + i, c) + 1);
+			if (!ptr[j])
+				return (free_all(ptr, j) == NULL);
+			ft_strlcpy(ptr[j++], s + i, c_len(s + i, c) + 1);
+			i += c_len(s + i, c);
+		}
+	}
+	ptr[j] = NULL;
+	return (0);
 }
 
 char	**ft_split(char const *s, char c)
 {
-	char	**strs;
-	int		i;
+	char	**ptr;
 
-	i = 0;
-	if (!s || w_count(s, c) == 0)
+	if (!s)
 		return (NULL);
-	strs = malloc(sizeof(char *) * (w_count(s, c) + 1));
-	if (!strs)
+	ptr = malloc((ft_count(s, c) + 1) * sizeof(char *));
+	if (!ptr)
 		return (NULL);
-	while (*s != 0)
-	{
-		while (*s != 0 && *s == c)
-			s++;
-		if (*s != 0)
-		{
-			strs[i] = ft_dup(s, c);
-			if (strs[i] == NULL)
-				return (ft_free(strs, i));
-			i++;
-		}
-		while (*s != 0 && *s != c)
-			s++;
-	}
-	strs[i] = 0;
-	return (strs);
+	if (nichan(s, c, ptr))
+		return (NULL);
+	return (ptr);
 }
-
-/*int	main(void)
-{
-	char	*s;
-	char	c;
-	char	**result;
-	size_t	i;
-
-	s = "hello, attak, goooo, goos.asw,el";
-	c = ' ';
-	i = 0;
-	result = ft_split(s, c);
-	while (result[i] != NULL)
-	{
-		printf("result[%zu] = %s\n", i, result[i]);
-		i++;
-	}
-}*/
