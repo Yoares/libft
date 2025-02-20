@@ -6,7 +6,7 @@
 /*   By: ykhoussi <ykhoussi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/27 15:50:02 by ykhoussi          #+#    #+#             */
-/*   Updated: 2024/11/12 18:38:15 by ykhoussi         ###   ########.fr       */
+/*   Updated: 2025/02/20 11:30:05 by ykhoussi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include <limits.h>
 
 int					ft_toupper(int c);
 int					ft_isascii(int c);
