@@ -6,13 +6,13 @@
 /*   By: ykhoussi <ykhoussi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 13:40:47 by ykhoussi          #+#    #+#             */
-/*   Updated: 2025/02/20 11:31:05 by ykhoussi         ###   ########.fr       */
+/*   Updated: 2025/02/20 11:50:23 by ykhoussi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_atoi(const char *str)
+long	ft_atoi(const char *str)
 {
 	int		i;
 	int		s;
